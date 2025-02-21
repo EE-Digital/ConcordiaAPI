@@ -1,27 +1,22 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply } from "fastify";
 import db from "../lib/database.js";
-import InvalidAuth from "../lib/invalidAuth.js";
-import Authorize from "../lib/authorize.js";
+import RequestWithUser from "../types/RequestWithUser.js";
 
 interface Body {
 	message: string;
 }
 
-export default async function ApiSendMessage(req: FastifyRequest<{ Body: Body }>, res: FastifyReply) {
-	const { message } = req.body;
-	const AccessToken = req.headers.authorization;
+export default async function ApiSendMessage(req: RequestWithUser, res: FastifyReply) {
+	const { message } = req.body as Body;
 
 	if (!message || message.length < 0) return res.send({ status: 400, message: "No message provided" });
-
-	const userId = await Authorize(AccessToken);
-	if (!userId) return InvalidAuth(res);
 
 	const newMessage = await db.messages.create({
 		data: {
 			text: message,
 			author: {
 				connect: {
-					id: userId,
+					id: req.user!.id,
 				},
 			},
 		},
