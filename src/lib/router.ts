@@ -24,7 +24,6 @@ export default async function runHTTPServer() {
 	const authDelete = authenticatedPathRegistrator(fastify, "DELETE");
 
 	fastify.addHook("onRequest", OpenCheck);
-
 	// Register routes
 
 	// Unauthenticated paths
