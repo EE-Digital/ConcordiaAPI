@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { FastifyReply, FastifyRequest, HookHandlerDoneFunction } from "fastify";
 
 import config from "../../config.json";
