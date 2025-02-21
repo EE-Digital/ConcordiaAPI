@@ -20,5 +20,24 @@ model User {
   profileUrl String?  @db.VarChar(255)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  messages messages[]
+  tokens tokens[]
 }
 
+model tokens {
+  token     String @id @default(cuid())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String
+}
+
+model messages {
+  id        String    @id @default(cuid())
+  text      String    @db.VarChar(255)
+  author    User      @relation(fields: [authorId], references: [id])
+  authorId  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index(fields: [createdAt])
+}
