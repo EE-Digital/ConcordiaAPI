@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
-import db from "../lib/database.js";
-import RequestWithUser from "../types/RequestWithUser.js";
+import db from "../../lib/database.js";
+import RequestWithUser from "../../types/RequestWithUser.js";
 
 export default async function ApiDeleteMessage(req: RequestWithUser, res: FastifyReply) {
 	const { channelId, messageId } = req.params as { channelId: string; messageId: string }; // 🤮🤮🤮 I ❤️ TS, it's so nice

@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import db from "../lib/database.js";
+import db from "../../lib/database.js";
 
 interface Body {
 	title: string;

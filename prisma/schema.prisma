@@ -24,20 +24,21 @@ model User {
 
   messages Message[]
   tokens Token[]
+  roles Role[]
 }
 
 model Token {
   token     String @id 
-  user      User   @relation(fields: [userId], references: [id])
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
 }
 
 model Message {
   id        String    @id @default(cuid())
   text      String    @db.VarChar(255)
-  author    User      @relation(fields: [authorId], references: [id])
-  authorId  String
-  channel   Channel   @relation(fields: [channelId], references: [id])
+  author    User?      @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId  String?
+  channel   Channel   @relation(fields: [channelId], references: [id], onDelete: Cascade)
   channelId String
   
   createdAt DateTime  @default(now())
@@ -56,4 +57,45 @@ model Channel {
   updatedAt   DateTime  @updatedAt
   
   messages  Message[]
+  permissions Permission[]
+}
+
+model Role {
+  title   String  @id @default(cuid())
+  
+  users   User[]
+  permissions Permission[]
+}
+
+model Permission {
+  id          String      @id @default(cuid())
+  role        Role        @relation(fields: [roleId], references: [title], onDelete: Cascade)
+  roleId      String
+  channel     Channel?     @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  channelId   String?
+  permission  Permissions
+  state       PermissionState
+
+  @@index([roleId, channelId, permission], name: "role_channel_permission")
+}
+
+enum Permissions {
+  MESSAGE_SEND  
+  MESSAGE_DELETE
+
+  CHANNEL_CREATE
+  CHANNEL_READ
+  CHANNEL_UPDATE
+  CHANNEL_DELETE
+
+  ROLE_CREATE
+  ROLE_READ
+  ROLE_UPDATE
+  ROLE_DELETE
+}
+
+enum PermissionState {
+  ALLOW
+  INHERIT
+  DENY
 }

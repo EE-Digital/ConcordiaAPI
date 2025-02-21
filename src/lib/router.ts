@@ -1,16 +1,17 @@
 import Fastify from "fastify";
 import ApiRoot from "../routes/root.js";
-import ApiMessages from "../routes/getMessages.js";
-import ApiUser from "../routes/user.js";
-import ApiSendMessage from "../routes/sendMessage.js";
-import ApiLogin from "../routes/login.js";
-import ApiRegister from "../routes/register.js";
+import ApiMessages from "../routes/messages/getMessages.js";
+import ApiUser from "../routes/auth/user.js";
+import ApiSendMessage from "../routes/messages/sendMessage.js";
+import ApiLogin from "../routes/auth/login.js";
+import ApiRegister from "../routes/auth/register.js";
 import authenticatedPathRegistrator from "./authPath.js";
-import ApiCreateChannel from "../routes/createChannel.js";
-import ApiDeleteChannel from "../routes/deleteChannel.js";
-import ApiGetChannels from "../routes/getChannels.js";
-import ApiDeleteMessage from "../routes/deleteMessage.js";
-import ApiUpdateMessage from "../routes/updateMessage.js";
+import ApiCreateChannel from "../routes/channels/createChannel.js";
+import ApiDeleteChannel from "../routes/channels/deleteChannel.js";
+import ApiGetChannels from "../routes/channels/getChannels.js";
+import ApiDeleteMessage from "../routes/messages/deleteMessage.js";
+import ApiUpdateMessage from "../routes/messages/updateMessage.js";
+import OpenCheck from "../middlewares/open.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -21,6 +22,8 @@ export default async function runHTTPServer() {
 	const authPut = authenticatedPathRegistrator(fastify, "PUT");
 	const authGet = authenticatedPathRegistrator(fastify, "GET");
 	const authDelete = authenticatedPathRegistrator(fastify, "DELETE");
+
+	fastify.addHook("onRequest", OpenCheck);
 
 	// Register routes
 

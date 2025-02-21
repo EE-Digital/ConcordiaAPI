@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import db from "../lib/database.js";
+import db from "../../lib/database.js";
 
 export default async function ApiGetChannels(req: FastifyRequest, res: FastifyReply) {
 	// TODO add permissions
