@@ -15,7 +15,7 @@ import OpenCheck from "../middlewares/open.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
-		logger: true,
+		logger: process.env.DEV ? true : false,
 	});
 
 	const authPost = authenticatedPathRegistrator(fastify, "POST");
@@ -24,7 +24,10 @@ export default async function runHTTPServer() {
 	const authDelete = authenticatedPathRegistrator(fastify, "DELETE");
 
 	fastify.addHook("onRequest", OpenCheck);
-	// Register routes
+
+	//
+	//  Register routes
+	//
 
 	// Unauthenticated paths
 	fastify.get("/", ApiRoot);
@@ -46,7 +49,7 @@ export default async function runHTTPServer() {
 	authDelete("/channels/:id", ApiDeleteChannel);
 
 	// Start the server
-	fastify.listen({ port: 3000 }, function (err: Error | null) {
+	fastify.listen({ port: 3000, host: "0.0.0.0" }, function (err: Error | null) {
 		if (err) {
 			fastify.log.error(err);
 		}
