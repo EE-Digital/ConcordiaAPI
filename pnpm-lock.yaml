@@ -11,6 +11,9 @@ importers:
       '@prisma/client':
         specifier: 6.4.0
         version: 6.4.0(prisma@6.4.0(typescript@5.7.3))(typescript@5.7.3)
+      '@types/node':
+        specifier: ^22.13.4
+        version: 22.13.4
       bcryptjs:
         specifier: ^3.0.2
         version: 3.0.2
@@ -221,6 +224,9 @@ packages:
   '@prisma/get-platform@6.4.0':
     resolution: {integrity: sha512-khANH9QbCRhFWiGj3qmR0clxLTU76Cimxf4JAhjhtpsc1jdG1A9geGe0kU4WAQ1YpiKFJ10s9j2wbbE/jSP99Q==}
 
+  '@types/node@22.13.4':
+    resolution: {integrity: sha512-ywP2X0DYtX3y08eFVx5fNIw7/uIv8hYUKgXoK8oayJlLnKcRfEYCxWMVE1XagUdVtCJlZT1AU4LXEABW+L1Peg==}
+
   abstract-logging@2.0.1:
     resolution: {integrity: sha512-2BjRTZxTPvheOvGbBslFSYOUkr+SjPtOnrLP33f+VIWLzezQpZcqVg7ja3L4dBXmzzgwT+a029jRx5PCi3JuiA==}
 
@@ -409,6 +415,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@6.20.0:
+    resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
 snapshots:
 
   '@esbuild/aix-ppc64@0.25.0':
@@ -534,6 +543,10 @@ snapshots:
   '@prisma/get-platform@6.4.0':
     dependencies:
       '@prisma/debug': 6.4.0
+
+  '@types/node@22.13.4':
+    dependencies:
+      undici-types: 6.20.0
 
   abstract-logging@2.0.1: {}
 
@@ -740,3 +753,5 @@ snapshots:
   toad-cache@3.7.0: {}
 
   typescript@5.7.3: {}
+
+  undici-types@6.20.0: {}

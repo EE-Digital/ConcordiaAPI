@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import bcrypt from "bcryptjs";
 import db from "../lib/database.js";
+import crypto from "crypto";
 
 type BodyType = {
 	username: string;
@@ -20,7 +21,9 @@ export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, 
 
 	if (!bcrypt.compareSync(password, user.password)) return invalidCredentials(res);
 
-	const token = await db.tokens.create({ data: { userId: user.id } });
+	const secureToken = crypto.randomBytes(64).toString("hex");
 
-	res.send({ status: 200, token: token.token });
+	const token = await db.token.create({ data: { token: secureToken, userId: user.id } });
+
+	res.status(200).send({ token: token.token });
 }

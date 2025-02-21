@@ -18,26 +18,42 @@ model User {
   name       String   @db.VarChar(255)
   password   String   @db.VarChar(255)
   profileUrl String?  @db.VarChar(255)
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  messages messages[]
-  tokens tokens[]
+  messages Message[]
+  tokens Token[]
 }
 
-model tokens {
-  token     String @id @default(cuid())
+model Token {
+  token     String @id 
   user      User   @relation(fields: [userId], references: [id])
   userId    String
 }
 
-model messages {
+model Message {
   id        String    @id @default(cuid())
   text      String    @db.VarChar(255)
   author    User      @relation(fields: [authorId], references: [id])
   authorId  String
+  channel   Channel   @relation(fields: [channelId], references: [id])
+  channelId String
+  
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
+
   @@index(fields: [createdAt])
+}
+
+model Channel {
+  id          String    @id @default(cuid())
+  title       String    @db.VarChar(255)
+  description String?   @db.VarChar(255)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  
+  messages  Message[]
 }
