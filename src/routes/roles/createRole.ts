@@ -3,9 +3,10 @@ import db from "../../lib/database.js";
 import hasPermission from "../../lib/hasPermission.js";
 import { RequestWithUser } from "../../types/RequestWithUser.js";
 import { Permission, Permissions } from "@prisma/client";
+import unauthorized from "../../lib/noPermission.js";
 
 export default async function ApiCreateRoles(req: RequestWithUser, res: FastifyReply) {
-	if (!hasPermission(req.user!, Permissions.ROLE_CREATE)) return res.status(403).send("You do not have permission to create a role");
+	if (!hasPermission(req.user!, Permissions.ROLE_CREATE)) return unauthorized(res);
 
 	if (!req.body) return res.status(400).send("No body provided");
 
