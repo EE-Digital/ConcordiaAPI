@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import db from "../lib/database.js";
-import RequestWithUser from "../types/RequestWithUser.js";
+import { RequestWithUser } from "../types/RequestWithUser.js";
 
 const fuckOff = (res: FastifyReply, reason: string) => {
 	console.log(`[LOG] [Auth] Unauthorized request: ${reason}`);
@@ -19,6 +19,9 @@ export default async function Authenticate(req: RequestWithUser, res: FastifyRep
 			},
 		},
 		omit: { password: true },
+		include: {
+			roles: { include: { permissions: true } },
+		},
 	});
 
 	if (!user) return fuckOff(res, "Invalid access token");

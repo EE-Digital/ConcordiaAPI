@@ -1,7 +1,12 @@
-import { User } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { FastifyRequest, RouteGenericInterface } from "fastify";
 
-type UserPayload = { user: Omit<User, "password"> };
+type SafeUser = Prisma.UserGetPayload<{
+	include: { roles: { include: { permissions: true } } };
+	omit: { password: true };
+}>;
+
+type UserPayload = { user: SafeUser };
 type RequestWithUser = FastifyRequest & Partial<UserPayload>;
 
-export default RequestWithUser;
+export { RequestWithUser, SafeUser };

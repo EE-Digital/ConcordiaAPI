@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import db from "../../lib/database.js";
-import RequestWithUser from "../../types/RequestWithUser.js";
+import { RequestWithUser } from "../../types/RequestWithUser.js";
 
 interface Body {
 	text: string;

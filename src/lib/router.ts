@@ -12,6 +12,11 @@ import ApiGetChannels from "../routes/channels/getChannels.js";
 import ApiDeleteMessage from "../routes/messages/deleteMessage.js";
 import ApiUpdateMessage from "../routes/messages/updateMessage.js";
 import OpenCheck from "../middlewares/open.js";
+import ApiUpdateChannel from "../routes/channels/updateChannel.js";
+import ApiRoles from "../routes/roles/getRoles.js";
+import ApiCreateRoles from "../routes/roles/createRole.js";
+import ApiUpdateRoles from "../routes/roles/updateRole.js";
+import ApiDeleteRole from "../routes/roles/deleteRole.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -40,13 +45,24 @@ export default async function runHTTPServer() {
 	// Messages
 	authGet("/channels/:id/messages", ApiMessages);
 	authPost("/channels/:id/messages", ApiSendMessage);
-	authDelete("/channels/:channelId/messages/:messageId", ApiDeleteMessage);
 	authPut("/channels/:channelId/messages/:messageId", ApiUpdateMessage);
+	authDelete("/channels/:channelId/messages/:messageId", ApiDeleteMessage);
 
 	// Channels
-	authPost("/channels", ApiCreateChannel);
 	authGet("/channels", ApiGetChannels);
-	authDelete("/channels/:id", ApiDeleteChannel);
+	authPost("/channels", ApiCreateChannel);
+	authPut("/channels/:channelId", ApiUpdateChannel);
+	authDelete("/channels/:channelId", ApiDeleteChannel);
+
+	// Roles
+	authGet("/roles", ApiRoles); // Get all roles
+	authPost("/roles", ApiCreateRoles); // Create role
+	authPut("/roles/:roleId", ApiUpdateRoles); // Update role
+	authDelete("/roles/:roleId", ApiDeleteRole); // Delete role
+
+	// Roles w/ users
+	authPost("/roles/:roleId/users", () => {}); // Add user to role
+	authDelete("/roles/:roleId/users/:userId", () => {}); // Remove user to role
 
 	// Start the server
 	fastify.listen({ port: 3000, host: "0.0.0.0" }, function (err: Error | null) {

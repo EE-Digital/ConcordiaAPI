@@ -61,7 +61,7 @@ model Channel {
 }
 
 model Role {
-  title   String  @id @default(cuid())
+  title   String  @id
   
   users   User[]
   permissions Permission[]
@@ -69,7 +69,7 @@ model Role {
 
 model Permission {
   id          String      @id @default(cuid())
-  role        Role        @relation(fields: [roleId], references: [title], onDelete: Cascade)
+  role        Role        @relation(fields: [roleId], references: [title], onDelete: Cascade, onUpdate: Cascade)
   roleId      String
   channel     Channel?     @relation(fields: [channelId], references: [id], onDelete: Cascade)
   channelId   String?
