@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import db from "../../lib/database.js";
+import log from "../../lib/log.js";
 
 export default async function ApiDeleteChannel(req: FastifyRequest, res: FastifyReply) {
 	// TODO add permissions
@@ -10,6 +11,8 @@ export default async function ApiDeleteChannel(req: FastifyRequest, res: Fastify
 	const { count } = await db.channel.deleteMany({ where: { id: channelId } }); // Delete the channel
 
 	if (count < 1) return res.status(404).send("Channel not found"); // Return 404 if channel not found
+
+	log(`Deleted channel ${channelId}`, "DeleteChannel", "INFO"); // Log the deletion
 
 	return res.status(200).send("ok");
 }

@@ -17,6 +17,7 @@ import ApiRoles from "../routes/roles/getRoles.js";
 import ApiCreateRoles from "../routes/roles/createRole.js";
 import ApiUpdateRoles from "../routes/roles/updateRole.js";
 import ApiDeleteRole from "../routes/roles/deleteRole.js";
+import cors from "@fastify/cors";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -29,6 +30,11 @@ export default async function runHTTPServer() {
 	const authDelete = authenticatedPathRegistrator(fastify, "DELETE");
 
 	fastify.addHook("onRequest", OpenCheck);
+
+	// Register cors
+	await fastify.register(cors, {
+		origin: true,
+	});
 
 	//
 	//  Register routes

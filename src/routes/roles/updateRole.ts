@@ -1,9 +1,10 @@
-import { FastifyReply, FastifyRequest } from "fastify";
+import { FastifyReply } from "fastify";
 import db from "../../lib/database.js";
 import hasPermission from "../../lib/hasPermission.js";
 import { Permissions } from "@prisma/client";
 import { RequestWithUser } from "../../types/RequestWithUser.js";
 import unauthorized from "../../lib/noPermission.js";
+import log from "../../lib/log.js";
 
 export default async function ApiUpdateRoles(req: RequestWithUser, res: FastifyReply) {
 	if (!hasPermission(req.user!, Permissions.ROLE_UPDATE)) return unauthorized(res);
@@ -26,6 +27,8 @@ export default async function ApiUpdateRoles(req: RequestWithUser, res: FastifyR
 			},
 			include: { permissions: { omit: { roleId: true, channelId: true } } },
 		});
+		log(`Updated role ${role.title}`, "UpdateRole", "INFO");
+
 		res.status(200).send(role);
 	} catch (e) {
 		return res.status(500).send({ error: "Error updating role" });
