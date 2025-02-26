@@ -2,6 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import db from "../../lib/database.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import log from "../../lib/log.js";
 
 type BodyType = {
 	username: string;
@@ -25,5 +26,7 @@ export default async function ApiRegister(req: FastifyRequest<{ Body: BodyType }
 	const secureToken = crypto.randomBytes(64).toString("hex");
 	const token = await db.token.create({ data: { token: secureToken, userId: user.id } });
 
-	res.send({ status: 200, token: token.token, user });
+	log(`New user ${user.name}`, "Register", "INFO");
+
+	return res.send({ status: 200, token: token.token, user });
 }
