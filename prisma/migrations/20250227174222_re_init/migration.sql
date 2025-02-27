@@ -1,23 +1,46 @@
--- DropForeignKey
-ALTER TABLE `message` DROP FOREIGN KEY `Message_authorId_fkey`;
+-- CreateTable
+CREATE TABLE `User` (
+    `id` VARCHAR(191) NOT NULL,
+    `name` VARCHAR(255) NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
+    `profileUrl` VARCHAR(255) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
--- DropForeignKey
-ALTER TABLE `message` DROP FOREIGN KEY `Message_channelId_fkey`;
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- DropForeignKey
-ALTER TABLE `token` DROP FOREIGN KEY `Token_userId_fkey`;
+-- CreateTable
+CREATE TABLE `Token` (
+    `token` VARCHAR(191) NOT NULL,
+    `userId` VARCHAR(191) NOT NULL,
 
--- DropIndex
-DROP INDEX `Message_authorId_fkey` ON `message`;
+    PRIMARY KEY (`token`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- DropIndex
-DROP INDEX `Message_channelId_fkey` ON `message`;
+-- CreateTable
+CREATE TABLE `Message` (
+    `id` VARCHAR(191) NOT NULL,
+    `text` VARCHAR(255) NOT NULL,
+    `authorId` VARCHAR(191) NULL,
+    `channelId` VARCHAR(191) NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
 
--- DropIndex
-DROP INDEX `Token_userId_fkey` ON `token`;
+    INDEX `Message_createdAt_idx`(`createdAt`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- AlterTable
-ALTER TABLE `message` MODIFY `authorId` VARCHAR(191) NULL;
+-- CreateTable
+CREATE TABLE `Channel` (
+    `id` VARCHAR(191) NOT NULL,
+    `title` VARCHAR(255) NOT NULL,
+    `description` VARCHAR(255) NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `Role` (

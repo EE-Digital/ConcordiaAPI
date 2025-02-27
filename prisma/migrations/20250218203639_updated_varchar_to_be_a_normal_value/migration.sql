@@ -1,4 +1,0 @@
--- AlterTable
-ALTER TABLE `user` MODIFY `name` VARCHAR(255) NOT NULL,
-    MODIFY `password` VARCHAR(255) NOT NULL,
-    MODIFY `profileUrl` VARCHAR(255) NOT NULL;
