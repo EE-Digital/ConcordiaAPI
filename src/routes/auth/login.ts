@@ -9,7 +9,7 @@ type BodyType = {
 	password: string;
 };
 
-const invalidCredentials = (res: FastifyReply) => res.send({ status: 400, message: "Invalid credentials" });
+const invalidCredentials = (res: FastifyReply) => res.status(400).send({ message: "Invalid credentials" });
 
 export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, res: FastifyReply) {
 	const { username, password } = req.body;

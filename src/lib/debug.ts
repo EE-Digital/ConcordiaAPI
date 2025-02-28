@@ -1,5 +1,6 @@
 import { Permissions, PermissionState } from "@prisma/client";
 import db from "./database.js";
+import bcrypt from "bcryptjs";
 
 export default async function createAdmin() {
 	const roleCheck = await db.role.findFirst({ where: { title: "admin" } });
@@ -22,5 +23,19 @@ export default async function createAdmin() {
 		},
 	});
 
-	console.log("[DEV MODE] [DEBUG] Created admin role with all permissions");
+	const passwordHash = await bcrypt.hash("admin", 10);
+
+	await db.user.create({
+		data: {
+			name: "admin",
+			password: passwordHash,
+			roles: {
+				connect: {
+					title: "admin",
+				},
+			},
+		},
+	});
+
+	console.log("[DEV MODE] [DEBUG] Created admin user with all permissions");
 }

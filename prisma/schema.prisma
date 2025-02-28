@@ -92,6 +92,7 @@ enum Permissions {
   ROLE_READ
   ROLE_UPDATE
   ROLE_DELETE
+  ROLE_ASSIGN
 }
 
 enum PermissionState {

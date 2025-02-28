@@ -1,7 +1,7 @@
 import Fastify from "fastify";
 import ApiRoot from "../routes/root.js";
 import ApiMessages from "../routes/messages/getMessages.js";
-import ApiUser from "../routes/auth/user.js";
+import ApiUser from "../routes/users/user.js";
 import ApiSendMessage from "../routes/messages/sendMessage.js";
 import ApiLogin from "../routes/auth/login.js";
 import ApiRegister from "../routes/auth/register.js";
@@ -18,6 +18,11 @@ import ApiCreateRoles from "../routes/roles/createRole.js";
 import ApiUpdateRoles from "../routes/roles/updateRole.js";
 import ApiDeleteRole from "../routes/roles/deleteRole.js";
 import cors from "@fastify/cors";
+import ApiDeleteToken from "../routes/auth/deleteToken.js";
+import ApiDeleteTokens from "../routes/auth/deleteTokens.js";
+import ApiUsers from "../routes/users/users.js";
+import ApiAssignRole from "../routes/roles/assignRole.js";
+import ApiUnassignRole from "../routes/roles/unassingRole.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -45,8 +50,15 @@ export default async function runHTTPServer() {
 	fastify.post("/login", ApiLogin);
 	fastify.post("/register", ApiRegister);
 
+	//
 	// Authenticated paths
-	authGet("/users/:id", ApiUser);
+	//
+	authGet("/users", ApiUsers);
+	authGet("/user", ApiUser);
+
+	// Token management
+	authDelete("/logout", ApiDeleteToken); // Logout
+	authDelete("/logout/all", ApiDeleteTokens); // Logout
 
 	// Messages
 	authGet("/channels/:id/messages", ApiMessages);
@@ -67,8 +79,8 @@ export default async function runHTTPServer() {
 	authDelete("/roles/:roleId", ApiDeleteRole); // Delete role
 
 	// Roles w/ users
-	authPost("/roles/:roleId/users", () => {}); // Add user to role
-	authDelete("/roles/:roleId/users/:userId", () => {}); // Remove user to role
+	authPost("/roles/:roleId/users/:userId", ApiAssignRole); // Add user to role
+	authDelete("/roles/:roleId/users/:userId", ApiUnassignRole); // Remove user from role
 
 	// Start the server
 	fastify.listen({ port: 3000, host: "0.0.0.0" }, function (err: Error | null) {
