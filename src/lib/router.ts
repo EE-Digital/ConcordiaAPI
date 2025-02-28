@@ -1,5 +1,4 @@
 import Fastify from "fastify";
-import ApiRoot from "../routes/root.js";
 import ApiMessages from "../routes/messages/getMessages.js";
 import ApiUser from "../routes/users/user.js";
 import ApiSendMessage from "../routes/messages/sendMessage.js";
@@ -23,6 +22,11 @@ import ApiDeleteTokens from "../routes/auth/deleteTokens.js";
 import ApiUsers from "../routes/users/users.js";
 import ApiAssignRole from "../routes/roles/assignRole.js";
 import ApiUnassignRole from "../routes/roles/unassingRole.js";
+import fastifyView from "@fastify/view";
+import Handlebars from "handlebars";
+import ApiStatus from "../routes/config/status.js";
+import chalk from "chalk";
+import ApiRoot from "../routes/root.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -41,12 +45,22 @@ export default async function runHTTPServer() {
 		origin: true,
 	});
 
+	// Register view
+	await fastify.register(fastifyView, {
+		engine: {
+			handlebars: Handlebars,
+		},
+		root: "./src/templates",
+		production: !process.env.DEV,
+	});
+
 	//
 	//  Register routes
 	//
 
 	// Unauthenticated paths
 	fastify.get("/", ApiRoot);
+	fastify.get("/status", ApiStatus);
 	fastify.post("/login", ApiLogin);
 	fastify.post("/register", ApiRegister);
 
@@ -83,9 +97,13 @@ export default async function runHTTPServer() {
 	authDelete("/roles/:roleId/users/:userId", ApiUnassignRole); // Remove user from role
 
 	// Start the server
-	fastify.listen({ port: 3000, host: "0.0.0.0" }, function (err: Error | null) {
+	fastify.listen({ port: 3000, host: "0.0.0.0" }, function (err: Error | null, address: string) {
 		if (err) {
 			fastify.log.error(err);
+		}
+
+		if (address) {
+			console.log(`${chalk.white.bold("Server listening on")} ${chalk.bold.green(address)}`);
 		}
 	});
 
