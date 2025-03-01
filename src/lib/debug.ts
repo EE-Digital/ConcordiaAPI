@@ -1,11 +1,12 @@
 import { Permissions, PermissionState } from "@prisma/client";
 import db from "./database.js";
 import bcrypt from "bcryptjs";
+import chalk from "chalk";
 
 export default async function createAdmin() {
 	const roleCheck = await db.role.findFirst({ where: { title: "admin" } });
 
-	if (roleCheck) return console.log("[DEV MODE] [DEBUG] Admin role already exists");
+	if (roleCheck) return console.log(chalk.blue("[DEV MODE] [DEBUG] Admin role already exists"));
 
 	const permissions = Object.values(Permissions);
 
@@ -37,5 +38,5 @@ export default async function createAdmin() {
 		},
 	});
 
-	console.log("[DEV MODE] [DEBUG] Created admin user with all permissions");
+	console.log(chalk.blue("[DEV MODE] [DEBUG] Created admin user with all permissions"));
 }
