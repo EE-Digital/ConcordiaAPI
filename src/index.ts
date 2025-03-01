@@ -17,6 +17,4 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Start the server
-else {
-	const server = spawn("npx tsx src/start.ts", { shell: true, cwd: process.cwd(), env: process.env });
-}
+else spawn("npx tsx src/start.ts", { stdio: "pipe", shell: true, cwd: process.cwd(), env: process.env });
