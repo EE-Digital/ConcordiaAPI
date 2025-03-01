@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 export default function log(message: string, module: string, type: "INFO" | "WARN" | "SEVERE_WARN" | "ERROR" = "INFO") {
-	if (!process.env.LOGGING) return;
+	if (!process.env.LOG_EVENTS) return;
 	switch (type) {
 		case "INFO":
 			return console.log(`[${type}] [${module}] ${message}`);
