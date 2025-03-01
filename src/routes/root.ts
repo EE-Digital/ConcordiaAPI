@@ -1,8 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import config from "../../config.json";
 
 export default function ApiRoot(req: FastifyRequest, res: FastifyReply) {
 	return res.viewAsync("root.handlebars", {
-		server: config,
+		server: {
+			name: process.env.NAME,
+			iconUrl: process.env.ICON_URL,
+			description: process.env.DESCRIPTION,
+			url: process.env.URL,
+		},
 	});
 }
