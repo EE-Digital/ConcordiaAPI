@@ -97,6 +97,7 @@ const setup = async () => {
 
 	console.log(chalk.green("\n[SETUP] Saving server configuration..."));
 	fs.writeFileSync("./.env", `DATABASE_URL=${database!.dbUrl}\nSERVER_NAME=${serverName}\nDESCRIPTION=${description}\nLOG_EVENTS=${logEvents}\nOPEN=true`);
+	fs.writeFileSync("./.serverdata.json", `{"version":"0.0.0", "lastUpdate":0}`); // TODO check for update
 
 	console.log(chalk.green("\n[SETUP] Admin user:"));
 	const adminName = (await input({ message: "Username: ", required: true, validate: validateUsername })).trim();
