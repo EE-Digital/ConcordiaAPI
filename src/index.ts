@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import chalk from "chalk";
 import setup from "./modules/setup.js";
 import { exec } from "child_process";
+
+dotenv.config();
 
 if (process.env.DEV) {
 	console.log(chalk.blue("Running in DEV mode"));
