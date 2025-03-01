@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import chalk from "chalk";
 import setup from "./modules/setup.js";
-import { exec } from "child_process";
+import { spawn } from "child_process";
 
 dotenv.config();
 
@@ -17,8 +17,6 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Start the server
-else
-	exec("npx tsx src/start.ts", (err, stdout, stderr) => {
-		console.log(stdout);
-		console.error(stderr);
-	});
+else {
+	const server = spawn("npx tsx src/start.ts", { shell: true, cwd: process.cwd(), env: process.env });
+}
