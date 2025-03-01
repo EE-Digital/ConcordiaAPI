@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import db from "../../lib/database.js";
+import db from "../../modules/database.js";
 import log from "../../lib/log.js";
 
 export default async function ApiDeleteChannel(req: FastifyRequest, res: FastifyReply) {

@@ -1,5 +1,5 @@
 import ServerData from "../../.serverdata.json";
-import log from "./log.js";
+import log from "../lib/log.js";
 import fs from "fs";
 
 const updateHandler = async () => {

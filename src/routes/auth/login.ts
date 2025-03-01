@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import bcrypt from "bcryptjs";
-import db from "../../lib/database.js";
+import db from "../../modules/database.js";
 import crypto from "crypto";
 import log from "../../lib/log.js";
 

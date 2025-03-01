@@ -4,7 +4,7 @@ import ApiUser from "../routes/users/user.js";
 import ApiSendMessage from "../routes/messages/sendMessage.js";
 import ApiLogin from "../routes/auth/login.js";
 import ApiRegister from "../routes/auth/register.js";
-import authenticatedPathRegistrator from "./authPath.js";
+import authenticatedPathRegistrator from "../lib/authPath.js";
 import ApiCreateChannel from "../routes/channels/createChannel.js";
 import ApiDeleteChannel from "../routes/channels/deleteChannel.js";
 import ApiGetChannels from "../routes/channels/getChannels.js";

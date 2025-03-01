@@ -1,6 +1,6 @@
 import { FastifyReply } from "fastify";
 import { RequestWithUser } from "../../types/RequestWithUser.js";
-import db from "../../lib/database.js";
+import db from "../../modules/database.js";
 
 export default async function ApiDeleteToken(req: RequestWithUser, res: FastifyReply) {
 	const token = await db.token.delete({

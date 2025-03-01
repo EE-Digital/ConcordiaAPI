@@ -14,8 +14,8 @@ const cookiejar = (res: FastifyReply) => {
 };
 
 export default function OpenCheck(req: FastifyRequest, res: FastifyReply, done: HookHandlerDoneFunction) {
-	if (config.open === "tea") return teapot(res);
-	if (config.open === "cookie") return cookiejar(res);
-	if (config.open) return done();
-	res.status(400).send("This API is closed.");
+	if (process.env.OPEN === "tea") return teapot(res);
+	if (process.env.OPEN === "cookie") return cookiejar(res);
+	if (process.env.OPEN === "true") return done();
+	res.status(401).send("This API is closed.");
 }
