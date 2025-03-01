@@ -11,11 +11,8 @@ const createAdmin = async () => {
 		throw new Error("[ERROR] [scripts/createAdmin] USERNAME env is not defined");
 	}
 
-	console.log("RUNNING");
-
 	const permissions = Object.values(Permissions);
-	console.log("RUNNING2");
-
+	console.log(chalk.green("\n[SETUP] Creating role..."));
 	await db.role.create({
 		data: {
 			title: "admin",
@@ -30,10 +27,9 @@ const createAdmin = async () => {
 		},
 	});
 
-	console.log("Created role");
-
 	const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
+	console.log(chalk.green("\n[SETUP] Creating admin user..."));
 	await db.user.create({
 		data: {
 			name: process.env.ADMIN_USERNAME,
@@ -45,10 +41,6 @@ const createAdmin = async () => {
 			},
 		},
 	});
-
-	console.log("Created user");
-
-	console.log(chalk.blue("[DEV MODE] [DEBUG] Created admin user with all permissions"));
 };
 
 createAdmin();
