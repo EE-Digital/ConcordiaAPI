@@ -1,12 +1,4 @@
 {
-	"serverId": "123",
-	"version": "0.0.0",
-	"name": "E&E Digital s.r.o.",
-	"url": "http://127.0.0.1:3000",
-	"description": "Official E&E Digital server",
-	"iconUrl": "https://i.pinimg.com/736x/8d/ef/59/8def591ccb18d5abb82c51e2461bce95.jpg",
-	"open": true,
-	"logging": true,
 	"owner": {
 		"username": "admin",
 		"password": "admin"
