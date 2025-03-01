@@ -43,6 +43,7 @@ const setupDatabase = async () => {
 	const dbUrl = `mysql://${database.dbUser}:${database.dbPassword}@${database.dbHost}/${database.dbName}`;
 
 	try {
+		console.log(dbUrl);
 		const connection = await mysql.createConnection(dbUrl);
 		if (connection) connection.end();
 
