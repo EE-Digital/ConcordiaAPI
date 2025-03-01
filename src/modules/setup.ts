@@ -40,18 +40,17 @@ const setupDatabase = async () => {
 		dbUrl: "",
 	};
 
+	// WARN localhost defaults to ipv6, if  ipv6 disabled fails everytime
+
 	const dbUrl = `mysql://${database.dbUser}:${database.dbPassword}@${database.dbHost}/${database.dbName}`;
 
 	try {
-		console.log(dbUrl);
 		const connection = await mysql.createConnection(dbUrl);
 		if (connection) connection.end();
 
 		console.log(chalk.green("[SETUP] Database test connection successful!"));
 		database.dbUrl = dbUrl;
 	} catch (error) {
-		console.log(error);
-
 		console.error(chalk.red.bold("[SETUP] Database connection failed!"));
 		console.error(chalk.red(`[SETUP] Please check your database credentials ${chalk.bold.underline("and that the database is running")}.`));
 		return null;
@@ -72,7 +71,11 @@ const setupPrisma = async (database: Database) => {
 	// create the schema
 	const data = execSync(`npx prisma migrate deploy`);
 
-	console.log(data.toString("utf8")); // Log output to console if in development mode
+	// create functions
+	const data2 = execSync(`npx prisma generate`);
+
+	console.log(data.toString("utf8"));
+	console.log(data2.toString("utf8"));
 
 	console.log(chalk.green("[SETUP] Database schema created!"));
 };

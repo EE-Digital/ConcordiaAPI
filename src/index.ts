@@ -6,6 +6,8 @@ if (process.env.DEV) {
 	console.log(chalk.blue("Running in DEV mode"));
 }
 
+console.log(`[MAIN] [INFO] .env existing ${process.env.DATABASE_URL ? "✅" : "❌"}`);
+
 // Setup the server if it's not already setup
 if (!process.env.DATABASE_URL) {
 	setup().then(() => process.exit(0));
