@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import db from "../../lib/database.js";
+import db from "../../modules/database.js";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import log from "../../lib/log.js";

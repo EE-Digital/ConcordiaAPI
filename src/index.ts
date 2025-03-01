@@ -1,7 +1,7 @@
 import chalk from "chalk";
-import createAdmin from "./lib/debug.js";
-import runHTTPServer from "./lib/router.js";
-import updateHandler from "./lib/update.js";
+import createAdmin from "./modules/debug.js";
+import runHTTPServer from "./modules/router.js";
+import updateHandler from "./modules/update.js";
 
 if (process.env.DEV) {
 	console.log(chalk.blue("Running in DEV mode"));

@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import db from "../../lib/database.js";
+import db from "../../modules/database.js";
 
 export default async function ApiMessages(req: FastifyRequest, res: FastifyReply) {
 	const { id } = req.params as { id: string };
