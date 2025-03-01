@@ -12,7 +12,8 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Start the server
-exec("npx tsx src/start.ts", (err, stdout, stderr) => {
-	console.log(stdout);
-	console.error(stderr);
-});
+else
+	exec("npx tsx src/start.ts", (err, stdout, stderr) => {
+		console.log(stdout);
+		console.error(stderr);
+	});
