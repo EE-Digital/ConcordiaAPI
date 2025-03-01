@@ -50,6 +50,8 @@ const setupDatabase = async () => {
 		console.log(chalk.green("[SETUP] Database test connection successful!"));
 		database.dbUrl = dbUrl;
 	} catch (error) {
+		console.log(error);
+
 		console.error(chalk.red.bold("[SETUP] Database connection failed!"));
 		console.error(chalk.red(`[SETUP] Please check your database credentials ${chalk.bold.underline("and that the database is running")}.`));
 		return null;
