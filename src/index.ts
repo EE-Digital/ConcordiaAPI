@@ -17,10 +17,4 @@ if (!process.env.DATABASE_URL) {
 }
 
 // Start the server
-else {
-	spawn("npx tsx src/start.ts", { stdio: "pipe", shell: true, cwd: process.cwd(), env: process.env, detached: true });
-	process.exit(0);
-	// server.stdout.pipe(process.stdout);
-	// server.stderr.pipe(process.stderr);
-	// process.stdin.pipe(server.stdin);
-}
+else spawn("npx tsx src/start.ts", { stdio: "inherit", shell: true, cwd: process.cwd(), env: process.env });
