@@ -1,14 +1,20 @@
 import { Permissions, PermissionState } from "@prisma/client";
-import db from "./database.js";
+import db from "../src/modules/database.js";
 import bcrypt from "bcryptjs";
 import chalk from "chalk";
 
-export default async function createAdmin() {
-	const roleCheck = await db.role.findFirst({ where: { title: "admin" } });
+const createAdmin = async () => {
+	if (!process.env.ADMIN_PASSWORD) {
+		throw new Error("[ERROR] [scripts/createAdmin] PASSWORD env is not defined");
+	}
+	if (!process.env.ADMIN_USERNAME) {
+		throw new Error("[ERROR] [scripts/createAdmin] USERNAME env is not defined");
+	}
 
-	if (roleCheck) return console.log(chalk.blue("[DEV MODE] [DEBUG] Admin role already exists"));
+	console.log("RUNNING");
 
 	const permissions = Object.values(Permissions);
+	console.log("RUNNING2");
 
 	await db.role.create({
 		data: {
@@ -24,11 +30,13 @@ export default async function createAdmin() {
 		},
 	});
 
-	const passwordHash = await bcrypt.hash("admin", 10);
+	console.log("Created role");
+
+	const passwordHash = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
 	await db.user.create({
 		data: {
-			name: "admin",
+			name: process.env.ADMIN_USERNAME,
 			password: passwordHash,
 			roles: {
 				connect: {
@@ -38,5 +46,9 @@ export default async function createAdmin() {
 		},
 	});
 
+	console.log("Created user");
+
 	console.log(chalk.blue("[DEV MODE] [DEBUG] Created admin user with all permissions"));
-}
+};
+
+createAdmin();

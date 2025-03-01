@@ -1,7 +1,6 @@
 import { confirm, input, password } from "@inquirer/prompts";
-import { PrismaClient } from "@prisma/client/extension";
 import chalk from "chalk";
-import { exec, execSync } from "child_process";
+import { execSync } from "child_process";
 import mysql from "mysql2/promise";
 import fs from "fs";
 
@@ -63,11 +62,14 @@ const setupPrisma = async (database: Database) => {
 	console.log(chalk.green("[SETUP] Checking for existing database schema..."));
 
 	console.log(chalk.green("[SETUP] Creating database schema..."));
-	// TODO save to file
+
+	// save to file
 	fs.writeFileSync("./.env", `DATABASE_URL=${database!.dbUrl}`);
+
+	// create the schema
 	const data = execSync(`npx prisma migrate deploy`);
 
-	console.log(data.toString("utf8"));
+	console.log(data.toString("utf8")); // Log output to console if in development mode
 
 	console.log(chalk.green("[SETUP] Database schema created!"));
 };
@@ -79,10 +81,12 @@ const setup = async () => {
 
 	console.log(chalk.green("\n[SETUP] Database configuration:"));
 
+	// Loop until a valid database connection is established
 	do {
 		database = await setupDatabase();
 	} while (!database);
 
+	// Ask if the user wants to setup the database schema
 	const setup = await confirm({ message: "Create database schema?", default: true });
 	if (setup) setupPrisma(database);
 
@@ -91,9 +95,24 @@ const setup = async () => {
 	const description = (await input({ message: "Server description: ", validate: validateDescription })).trim();
 	const logEvents = await confirm({ message: "Log events?", default: true });
 
+	console.log(chalk.green("\n[SETUP] Saving server configuration..."));
+	fs.writeFileSync("./.env", `DATABASE_URL=${database!.dbUrl}\nSERVER_NAME=${serverName}\nDESCRIPTION=${description}\nLOG_EVENTS=${logEvents}\nOPEN=true`);
+
 	console.log(chalk.green("\n[SETUP] Admin user:"));
 	const adminName = (await input({ message: "Username: ", required: true, validate: validateUsername })).trim();
 	const adminPassword = await password({ message: "Password: ", validate: validatePassword });
+
+	console.log(chalk.green("\n[SETUP] Creating admin user..."));
+	// Create a temporary file to read data from
+	fs.writeFileSync("./.temp.env", `DATABASE_URL=${database!.dbUrl}\nADMIN_USERNAME=${adminName}\nADMIN_PASSWORD=${adminPassword}`);
+	// Run the script to create the admin user
+	execSync(`npx tsx --env-file=.temp.env ./scripts/createAdmin.ts`);
+	// Remove the temporary file
+	fs.unlinkSync("./.temp.env");
+	console.log(chalk.green("[SETUP] Admin user created!"));
+
+	console.log(chalk.green("\n[SETUP] Server setup complete!"));
+	console.log(chalk.green.bold("[SETUP] Please restart the server to apply changes."));
 };
 
 export default setup;
