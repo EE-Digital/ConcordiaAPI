@@ -1,14 +1,14 @@
-import ServerData from "../../.serverdata.json";
 import log from "../lib/log.js";
 import fs from "fs";
 
 const updateHandler = async () => {
+	const ServerData = JSON.parse(fs.readFileSync(".serverdata.json").toString());
 	const today = new Date();
-	if (!(today.getTime() > Number.parseInt(ServerData.lastCheck) + 86400000)) {
+	if (!(today.getTime() > Number.parseInt(ServerData.lastUpdate) + 86400000)) {
 		return log(`Skipping check for update, last check less than 24 hours ago`, "Updater", "WARN");
 	}
 	// Update last check date
-	ServerData.lastCheck = today.getTime().toString();
+	ServerData.lastUpdate = today.getTime().toString();
 
 	fs.writeFileSync(".serverdata.json", JSON.stringify(ServerData));
 
