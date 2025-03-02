@@ -6,7 +6,7 @@ export default async function ApiStatus(req: FastifyRequest, res: FastifyReply) 
 	res.send({
 		version: ServerData.version,
 		iconUrl: process.env.ICON_URL,
-		name: process.env.NAME,
+		name: process.env.SERVER_NAME,
 		description: process.env.DESCRIPTION,
 	});
 }
