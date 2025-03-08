@@ -5,17 +5,18 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "npx tsx src/index.ts",
-		"dev": "cross-env DEV=true npx tsx watch src/index.ts"
+		"dev": "cross-env DEV=true npx tsx watch src/start.ts"
 	},
 	"type": "module",
 	"keywords": [],
 	"author": "E&E Digital s.r.o.",
 	"license": "ISC",
-	"packageManager": "pnpm@10.5.2",
+	"packageManager": "pnpm@10.6.1",
 	"dependencies": {
 		"@fastify/cors": "^10.1.0",
 		"@fastify/view": "^10.0.2",
 		"@inquirer/prompts": "^7.3.2",
+		"@paralleldrive/cuid2": "^2.2.2",
 		"@prisma/client": "6.4.1",
 		"bcryptjs": "^3.0.2",
 		"chalk": "^5.4.1",
