@@ -6,7 +6,7 @@ export default function ApiRoot(req: FastifyRequest, res: FastifyReply) {
 			name: process.env.SERVER_NAME,
 			iconUrl: process.env.ICON_URL,
 			description: process.env.DESCRIPTION,
-			url: process.env.URL,
+			url: encodeURIComponent(process.env.URL as string),
 		},
 	});
 }

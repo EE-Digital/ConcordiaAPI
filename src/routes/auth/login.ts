@@ -3,30 +3,55 @@ import bcrypt from "bcryptjs";
 import db from "../../modules/database.js";
 import crypto from "crypto";
 import log from "../../lib/log.js";
+import { getAndDeleteChallenge } from "../../lib/challengeStorage.js";
+import { isCuid } from "@paralleldrive/cuid2";
+import { safeUser } from "../../lib/safeData.js";
 
 type BodyType = {
-	username: string;
-	password: string;
+	cuid: string;
+	challengeId: string;
+	signedChallenge: string;
 };
 
-const invalidCredentials = (res: FastifyReply) => res.status(400).send({ message: "Invalid credentials" });
-
 export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, res: FastifyReply) {
-	const { username, password } = req.body;
+	const { cuid, challengeId, signedChallenge } = req.body;
 
-	if (!username || !password) return invalidCredentials(res);
+	// Make sure cuid is a valid cuid
+	if (!isCuid(cuid)) return res.status(400).send({ message: "Invalid cuid!" });
 
-	const user = await db.user.findFirst({ where: { name: username } });
+	const challenge = getAndDeleteChallenge(challengeId);
 
-	if (!user) return invalidCredentials(res);
+	// Check if challengeId is valid
+	if (!challenge) return res.status(400).send({ message: "Invalid challengeId" });
 
-	if (!bcrypt.compareSync(password, user.password)) return invalidCredentials(res);
+	// Make sure cuid is  the same
+	if (challenge.userCuid !== cuid) return res.status(403).send({ message: "Invalid cuid" });
 
-	const secureToken = crypto.randomBytes(64).toString("hex");
+	// Get user if exists
+	const user = await db.user.findFirst({
+		where: {
+			id: cuid,
+		},
+	});
 
-	const token = await db.token.create({ data: { token: secureToken, userId: user.id } });
+	// Make sure user exists
+	if (!user) return res.status(400).send({ message: "User not found" });
 
+	const verifier = crypto.createVerify("RSA-SHA256");
+	verifier.update(challenge.challenge);
+	const isValid = verifier.verify(user.publicKey!, signedChallenge, "base64");
+
+	console.log(isValid);
+	if (!isValid) return res.status(403).send({ message: "Invalid signature" });
+
+	const token = await db.token.create({
+		data: {
+			userId: user.id,
+			token: crypto.randomBytes(64).toString("hex"),
+		},
+	});
 	log(`User ${user.name} logged in`, "Login", "INFO");
 
-	return res.status(200).send({ token: token.token });
+	// return res.status(200).send({ token: token.token });
+	return res.status(200).send({ status: 200, token: token.token, user: safeUser(user) });
 }

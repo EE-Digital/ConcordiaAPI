@@ -27,6 +27,7 @@ import Handlebars from "handlebars";
 import ApiStatus from "../routes/config/status.js";
 import chalk from "chalk";
 import ApiRoot from "../routes/root.js";
+import ApiInitLogin from "../routes/auth/init.js";
 
 export default async function runHTTPServer() {
 	const fastify = Fastify({
@@ -59,10 +60,16 @@ export default async function runHTTPServer() {
 	//
 
 	// Unauthenticated paths
+
 	fastify.get("/", ApiRoot);
 	fastify.get("/status", ApiStatus);
-	fastify.post("/login", ApiLogin);
-	fastify.post("/register", ApiRegister);
+
+	//
+	// Auth paths
+	//
+	fastify.post("/auth/init", ApiInitLogin);
+	fastify.post("/auth/login", ApiLogin);
+	fastify.post("/auth/register", ApiRegister);
 
 	//
 	// Authenticated paths
