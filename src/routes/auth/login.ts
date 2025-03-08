@@ -7,6 +7,7 @@ import { getAndDeleteChallenge } from "../../lib/challengeStorage.js";
 import { isCuid } from "@paralleldrive/cuid2";
 import { safeUser } from "../../lib/safeData.js";
 
+
 type BodyType = {
 	cuid: string;
 	challengeId: string;
@@ -51,7 +52,6 @@ export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, 
 	});
 
 	log(`User ${user.name} logged in`, "Login", "INFO");
-
-	// return res.status(200).send({ token: token.token });
+  
 	return res.status(200).send({ status: 200, token: token.token, user: safeUser(user) });
 }

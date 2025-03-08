@@ -29,6 +29,7 @@ import chalk from "chalk";
 import ApiRoot from "../routes/root.js";
 import ApiInitLogin from "../routes/auth/init.js";
 
+
 export default async function runHTTPServer() {
 	const fastify = Fastify({
 		logger: process.env.DEV ? true : false,
@@ -60,7 +61,6 @@ export default async function runHTTPServer() {
 	//
 
 	// Unauthenticated paths
-
 	fastify.get("/", ApiRoot);
 	fastify.get("/status", ApiStatus);
 

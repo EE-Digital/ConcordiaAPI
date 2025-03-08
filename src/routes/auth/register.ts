@@ -6,6 +6,7 @@ import log from "../../lib/log.js";
 import { isCuid } from "@paralleldrive/cuid2";
 import { safeUser } from "../../lib/safeData.js";
 
+
 type BodyType = {
 	publicKey: string;
 	cuid: string;
