@@ -41,7 +41,6 @@ export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, 
 	verifier.update(challenge.challenge);
 	const isValid = verifier.verify(user.publicKey!, signedChallenge, "base64");
 
-	console.log(isValid);
 	if (!isValid) return res.status(403).send({ message: "Invalid signature" });
 
 	const token = await db.token.create({
@@ -50,6 +49,7 @@ export default async function ApiLogin(req: FastifyRequest<{ Body: BodyType }>, 
 			token: crypto.randomBytes(64).toString("hex"),
 		},
 	});
+
 	log(`User ${user.name} logged in`, "Login", "INFO");
 
 	// return res.status(200).send({ token: token.token });
